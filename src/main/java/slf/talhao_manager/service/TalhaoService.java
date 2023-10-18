@@ -29,19 +29,23 @@ public class TalhaoService {
 
     }
 
-    public String coondConverter(List<List<Double>> listCoord){
-        StringBuilder novaString = new StringBuilder("POLYGON((");
+    public String coondConverter(List<List<List<Double>>> listCoord){
+        StringBuilder novaString = new StringBuilder("POLYGON(");
 
-        for (List<Double> coordenadas : listCoord){
-            if (coordenadas.size() != 2){
-                throw new IllegalArgumentException("Cada cordenada deve conter um registro de latitude e um de longitude, nem mais nem menos!");
+        for (List<List<Double>> anel : listCoord){
+            novaString.append("(");
+            for (List<Double> ponto : anel) {
+                double longitude = ponto.get(0);
+                double latitude = ponto.get(1);
+                novaString.append(longitude).append(" ").append(latitude).append(",");
             }
-            double longitude = coordenadas.get(0);
-            double latitude = coordenadas.get(1);
-            novaString.append(longitude).append(" ").append(latitude).append(",");
+
+            novaString.deleteCharAt(novaString.length() -1);
+            novaString.append("),");
         }
         novaString.deleteCharAt(novaString.length() -1);
-        novaString.append("))");
+        novaString.append(")");
+
         return novaString.toString();
     }
 }
