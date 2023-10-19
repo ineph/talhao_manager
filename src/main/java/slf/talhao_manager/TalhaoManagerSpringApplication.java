@@ -13,9 +13,4 @@ public class TalhaoManagerSpringApplication {
 		SpringApplication.run(TalhaoManagerSpringApplication.class, args);
 	}
 
-//	@Bean
-//	public JtsModule jtsModule() {
-//		return new JtsModule();
-//	}
-
 }
