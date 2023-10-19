@@ -1,14 +1,10 @@
 package slf.talhao_manager.repository;
 
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.io.WKTReader;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import slf.talhao_manager.model.TalhaoEntity;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
