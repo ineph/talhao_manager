@@ -23,9 +23,9 @@ public class TalhaoController {
     }
 
     @PostMapping
-    public void cadastrar(@RequestBody TalhaoDTO novoTalhao){
+    public ResponseEntity<String> cadastrar(@RequestBody TalhaoDTO novoTalhao){
 
-        talhaoSvc.salvarTalhao(novoTalhao);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(talhaoSalvo);
+        Long id_talhao = talhaoSvc.salvarTalhao(novoTalhao);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Talhão criado! ID: " + id_talhao);
     }
 }

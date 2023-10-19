@@ -17,14 +17,16 @@ public class TalhaoService {
         this.talhaoRepo = talhaoRepo;
     }
 
-    public void salvarTalhao(TalhaoDTO novoTalhao){
+    public Long salvarTalhao(TalhaoDTO novoTalhao){
         TalhaoEntity talhao = new TalhaoEntity();
 
         if (novoTalhao.getGeom().getFeatures().size() > 1) {
             System.out.println("deveria dar erro, pedindo para cadastrar apenas um polígono/talhão por vez, para cada fazenda ;)");
+            return -1L;
         } else {
             List coord = novoTalhao.getGeom().getFeatures().get(0).getGeometry().getCoordinates();
-            talhaoRepo.inserirPoligono(novoTalhao.getCd_id_fazenda(), coondConverter(coord));
+            Long id_criado = talhaoRepo.inserirPoligono(novoTalhao.getCd_id_fazenda(), coondConverter(coord));
+            return id_criado;
         }
 
     }

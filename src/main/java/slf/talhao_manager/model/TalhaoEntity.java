@@ -7,9 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import org.locationtech.jts.geom.Geometry;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity(name = "cdt_field" )
@@ -17,6 +15,7 @@ public class TalhaoEntity {
 
     @Id
     @Column(name = "cd_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long cd_id;
 
     @Column(name = "cd_id_fazenda")
