@@ -1,7 +1,9 @@
 package slf.talhao_manager.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import slf.talhao_manager.exception.CustomException;
 import slf.talhao_manager.model.TalhaoEntity;
 import slf.talhao_manager.dto.TalhaoDTO;
 import slf.talhao_manager.repository.TalhaoRepository;
@@ -21,8 +23,7 @@ public class TalhaoService {
         TalhaoEntity talhao = new TalhaoEntity();
 
         if (novoTalhao.getGeom().getFeatures().size() > 1) {
-            System.out.println("deveria dar erro, pedindo para cadastrar apenas um polígono/talhão por vez, para cada fazenda ;)");
-            return -1L;
+            throw new CustomException("Deve ser cadastrado apenas um polígono por vez para cada fazenda!", HttpStatus.UNPROCESSABLE_ENTITY);
         } else {
             List coord = novoTalhao.getGeom().getFeatures().get(0).getGeometry().getCoordinates();
             Long id_criado = talhaoRepo.inserirPoligono(novoTalhao.getCd_id_fazenda(), coondConverter(coord));
