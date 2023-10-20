@@ -16,10 +16,10 @@ public class TalhaoEntity {
     @Id
     @Column(name = "cd_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long cd_id;
+    private long cdId;
 
     @Column(name = "cd_id_fazenda")
-    private long cd_id_fazenda;
+    private long cdIdFazenda;
 
     @Column(columnDefinition = "geometry(Geometry,4326)")
     @JsonSerialize(using = GeometrySerializer.class)

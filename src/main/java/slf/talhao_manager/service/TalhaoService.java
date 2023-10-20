@@ -1,23 +1,21 @@
 package slf.talhao_manager.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import slf.talhao_manager.exception.CustomException;
 import slf.talhao_manager.model.TalhaoEntity;
 import slf.talhao_manager.dto.TalhaoDTO;
-import slf.talhao_manager.repository.TalhaoRepository;
+import slf.talhao_manager.repository.TalhaoJdbcTemplateRepository;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TalhaoService {
-    private final TalhaoRepository talhaoRepo;
+    private final TalhaoJdbcTemplateRepository talhaoRepo;
 
-    @Autowired
-    public TalhaoService(TalhaoRepository talhaoRepo){
-        this.talhaoRepo = talhaoRepo;
-    }
 
     public Long salvarTalhao(TalhaoDTO novoTalhao){
         TalhaoEntity talhao = new TalhaoEntity();

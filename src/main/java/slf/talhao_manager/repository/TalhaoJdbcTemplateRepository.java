@@ -1,5 +1,6 @@
 package slf.talhao_manager.repository;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -12,13 +13,10 @@ import java.util.Objects;
 
 
 @Repository
-public class TalhaoRepository {
+@RequiredArgsConstructor
+public class TalhaoJdbcTemplateRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public TalhaoRepository(JdbcTemplate jdbcTemplate){
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     public Long inserirPoligono(long cd_id_fazenda, String coord){
             String sql = "INSERT INTO cdt_field (cd_id_fazenda, geom) VALUES (?, ST_GeomFromText(?, 4326)) RETURNING cd_id";
