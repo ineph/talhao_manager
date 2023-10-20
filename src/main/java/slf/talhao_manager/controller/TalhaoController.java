@@ -20,7 +20,6 @@ public class TalhaoController {
     private final TalhaoService talhaoSvc;
     private final TalhaoJpaRepository talhaoRepo;
 
-    @Autowired
     public TalhaoController(TalhaoService talhaoSvc, TalhaoJpaRepository talhaoRepo) {
         this.talhaoSvc = talhaoSvc;
         this.talhaoRepo = talhaoRepo;
