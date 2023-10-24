@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class TalhaoDTO {
 
-    private long cd_id_fazenda;
+    private long cdIdFazenda;
 
     private GeoJsonDTO geom;
 }

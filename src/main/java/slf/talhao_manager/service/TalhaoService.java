@@ -1,7 +1,6 @@
 package slf.talhao_manager.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import slf.talhao_manager.exception.CustomException;
@@ -24,7 +23,7 @@ public class TalhaoService {
             throw new CustomException("Deve ser cadastrado apenas um polígono por vez para cada fazenda!", HttpStatus.UNPROCESSABLE_ENTITY);
         } else {
             List coord = novoTalhao.getGeom().getFeatures().get(0).getGeometry().getCoordinates();
-            Long id_criado = talhaoRepo.inserirPoligono(novoTalhao.getCd_id_fazenda(), coondConverter(coord));
+            Long id_criado = talhaoRepo.inserirPoligono(novoTalhao.getCdIdFazenda(), coondConverter(coord));
             return id_criado;
         }
 
