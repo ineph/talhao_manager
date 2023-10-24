@@ -8,6 +8,7 @@ import slf.talhao_manager.model.TalhaoEntity;
 import slf.talhao_manager.dto.TalhaoDTO;
 import slf.talhao_manager.repository.TalhaoJdbcTemplateRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,18 +24,18 @@ public class TalhaoService {
             throw new CustomException("Deve ser cadastrado apenas um polígono por vez para cada fazenda!", HttpStatus.UNPROCESSABLE_ENTITY);
         } else {
             List coord = novoTalhao.getGeom().getFeatures().get(0).getGeometry().getCoordinates();
-            Long id_criado = talhaoRepo.inserirPoligono(novoTalhao.getCdIdFazenda(), coondConverter(coord));
+            Long id_criado = talhaoRepo.inserirPoligono(novoTalhao.getCdIdFazenda(), coordConversor(coord));
             return id_criado;
         }
 
     }
 
-    public String coondConverter(List<List<List<Double>>> listCoord){
+    public String coordConversor(List<List<List<Double>>> listCoord){
         StringBuilder novaString = new StringBuilder("POLYGON(");
 
-        for (List<List<Double>> anel : listCoord){
+        for (List<List<Double>> dupla : listCoord){
             novaString.append("(");
-            for (List<Double> ponto : anel) {
+            for (List<Double> ponto : dupla) {
                 double longitude = ponto.get(0);
                 double latitude = ponto.get(1);
                 novaString.append(longitude).append(" ").append(latitude).append(",");
@@ -47,5 +48,29 @@ public class TalhaoService {
         novaString.append(")");
 
         return novaString.toString();
+    }
+
+    public List<List<List<Double>>> polygonConversor(String poligono){
+        List<List<List<Double>>> coordenadas = new ArrayList<>();
+        poligono = poligono.trim().replace("POLYGON((", "").replace("))", "");
+        String[] duplas = poligono.split("\\),\\(");
+
+        for (String dupla : duplas) {
+            List<List<Double>> ringCoordinates = new ArrayList<>();
+            String[] coords = dupla.split(",");
+            for (String coordenada : coords) {
+                String[] parts = coordenada.trim().split(" ");
+                if (parts.length == 2) {
+                    double longitude = Double.parseDouble(parts[0]);
+                    double latitude = Double.parseDouble(parts[1]);
+                    List<Double> point = new ArrayList<>();
+                    point.add(longitude);
+                    point.add(latitude);
+                    ringCoordinates.add(point);
+                }
+            }
+            coordenadas.add(ringCoordinates);
+        }
+        return coordenadas;
     }
 }
