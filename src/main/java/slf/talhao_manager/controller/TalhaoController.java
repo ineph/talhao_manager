@@ -3,6 +3,7 @@ package slf.talhao_manager.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import slf.talhao_manager.dto.GeoJsonDTO;
 import slf.talhao_manager.dto.TalhaoDTO;
 import slf.talhao_manager.exception.CustomException;
 import slf.talhao_manager.model.TalhaoEntity;
@@ -30,12 +31,7 @@ public class TalhaoController {
     }
 
     @GetMapping("talhao/fazenda/{cdIdFazenda}")
-    public ResponseEntity<List<TalhaoEntity>> getTalhaoPorFazenda(@PathVariable(value = "cdIdFazenda") Long cdIdFazenda) {
-        List<TalhaoEntity> talhaoEntity = talhaoRepo.findByCdIdFazenda(cdIdFazenda);
-
-        if (talhaoEntity.isEmpty()) {
-            new CustomException("Nenhum Talhão foi encontrado para a Fazenda " + cdIdFazenda, HttpStatus.NO_CONTENT);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(talhaoEntity);
+    public ResponseEntity<String> getTalhaoPorFazenda(@PathVariable(value = "cdIdFazenda") Long cdIdFazenda) {
+        return ResponseEntity.status(HttpStatus.OK).body(talhaoSvc.findTalhoesByCdIdFazenda(cdIdFazenda));
     }
 }

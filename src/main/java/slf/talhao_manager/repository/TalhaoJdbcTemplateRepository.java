@@ -19,7 +19,7 @@ public class TalhaoJdbcTemplateRepository {
 
     public Long inserirPoligono(long cd_id_fazenda, String coord){
             String sql = "INSERT INTO cdt_field (cd_id_fazenda, geom) VALUES (?, ST_GeomFromText(?, 4326)) RETURNING cd_id";
-            KeyHolder keyHolder = new GeneratedKeyHolder();
+            KeyHolder chave = new GeneratedKeyHolder();
             jdbcTemplate.update(
                 connection -> {
                     PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -27,8 +27,8 @@ public class TalhaoJdbcTemplateRepository {
                     ps.setString(2, coord);
                     return ps;
                 },
-                keyHolder
+                chave
             );
-            return Objects.requireNonNull(keyHolder.getKey()).longValue();
+            return Objects.requireNonNull(chave.getKey()).longValue();
     }
 }

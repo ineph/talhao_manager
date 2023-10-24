@@ -3,18 +3,23 @@ package slf.talhao_manager.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import slf.talhao_manager.dto.TalhaoOutput;
 import slf.talhao_manager.exception.CustomException;
 import slf.talhao_manager.model.TalhaoEntity;
 import slf.talhao_manager.dto.TalhaoDTO;
 import slf.talhao_manager.repository.TalhaoJdbcTemplateRepository;
+import slf.talhao_manager.repository.TalhaoJpaRepository;
 
+import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class TalhaoService {
-    private final TalhaoJdbcTemplateRepository talhaoRepo;
+    private final TalhaoJdbcTemplateRepository talhaoJDBCRepo;
+    private final TalhaoJpaRepository talhaoJpaRepo;
 
 
     public Long salvarTalhao(TalhaoDTO novoTalhao){
@@ -24,10 +29,25 @@ public class TalhaoService {
             throw new CustomException("Deve ser cadastrado apenas um polígono por vez para cada fazenda!", HttpStatus.UNPROCESSABLE_ENTITY);
         } else {
             List coord = novoTalhao.getGeom().getFeatures().get(0).getGeometry().getCoordinates();
-            Long id_criado = talhaoRepo.inserirPoligono(novoTalhao.getCdIdFazenda(), coordConversor(coord));
-            return id_criado;
+            Long idCriado = talhaoJDBCRepo.inserirPoligono(novoTalhao.getCdIdFazenda(), coordConversor(coord));
+            return idCriado;
         }
 
+    }
+
+    public String findTalhoesByCdIdFazenda(Long idFazenda) {
+
+//        List<TalhaoEntity> poligonos = talhaoJpaRepo.findAllByCdIdFazenda(idFazenda);
+        List<TalhaoOutput> poligonos = talhaoJpaRepo.findAllByCdIdFazenda(idFazenda);
+
+        for (TalhaoOutput poligono : poligonos) {
+            String a = poligono.getGeom();
+            Long b = poligono.getCdIdFazenda();
+            Long c = poligono.getCdId();
+            List<List<List<Double>>> coord = polygonConversor(poligono.getGeom());
+            System.out.println(poligonos);        }
+
+        return "asd";
     }
 
     public String coordConversor(List<List<List<Double>>> listCoord){
