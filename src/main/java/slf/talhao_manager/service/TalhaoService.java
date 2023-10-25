@@ -3,17 +3,15 @@ package slf.talhao_manager.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import slf.talhao_manager.dto.TalhaoOutput;
+import slf.talhao_manager.dto.*;
 import slf.talhao_manager.exception.CustomException;
 import slf.talhao_manager.model.TalhaoEntity;
-import slf.talhao_manager.dto.TalhaoDTO;
 import slf.talhao_manager.repository.TalhaoJdbcTemplateRepository;
 import slf.talhao_manager.repository.TalhaoJpaRepository;
 
-import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +21,6 @@ public class TalhaoService {
 
 
     public Long salvarTalhao(TalhaoDTO novoTalhao){
-        TalhaoEntity talhao = new TalhaoEntity();
 
         if (novoTalhao.getGeom().getFeatures().size() > 1) {
             throw new CustomException("Deve ser cadastrado apenas um polígono por vez para cada fazenda!", HttpStatus.UNPROCESSABLE_ENTITY);
@@ -32,22 +29,29 @@ public class TalhaoService {
             Long idCriado = talhaoJDBCRepo.inserirPoligono(novoTalhao.getCdIdFazenda(), coordConversor(coord));
             return idCriado;
         }
-
     }
 
-    public String findTalhoesByCdIdFazenda(Long idFazenda) {
+    public GeoJsonDTO findTalhoesByCdIdFazenda(Long idFazenda) {
+        List<TalhaoQueryOutput> poligonos = talhaoJpaRepo.findAllByCdIdFazenda(idFazenda);
+        GeoJsonDTO featureCollection = new GeoJsonDTO();
+        List<FeatureDTO> tempfeatures = new ArrayList<>();
 
-//        List<TalhaoEntity> poligonos = talhaoJpaRepo.findAllByCdIdFazenda(idFazenda);
-        List<TalhaoOutput> poligonos = talhaoJpaRepo.findAllByCdIdFazenda(idFazenda);
+        for (TalhaoQueryOutput poligono : poligonos) {
+            FeatureDTO feature = new FeatureDTO();
+            GeometryDTO geometry = new GeometryDTO();
+            PropertiesDTO properties = new PropertiesDTO();
 
-        for (TalhaoOutput poligono : poligonos) {
-            String a = poligono.getGeom();
-            Long b = poligono.getCdIdFazenda();
-            Long c = poligono.getCdId();
-            List<List<List<Double>>> coord = polygonConversor(poligono.getGeom());
-            System.out.println(poligonos);        }
+            properties.setIdCdFazenda(poligono.getCdIdFazenda());
+            properties.setIdCdTalhao(poligono.getCdId());
+            geometry.setCoordinates(polygonConversor(poligono.getGeom()));
+            feature.setGeometry(geometry);
+            feature.setProperties(properties);
 
-        return "asd";
+            tempfeatures.add(feature);
+        }
+        featureCollection.setFeatures(tempfeatures);
+
+        return featureCollection;
     }
 
     public String coordConversor(List<List<List<Double>>> listCoord){

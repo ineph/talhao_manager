@@ -1,6 +1,6 @@
 package slf.talhao_manager.dto;
 
-public interface TalhaoOutput {
+public interface TalhaoQueryOutput {
 
     long getCdId();
     long getCdIdFazenda();

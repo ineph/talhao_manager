@@ -5,12 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import slf.talhao_manager.dto.GeoJsonDTO;
 import slf.talhao_manager.dto.TalhaoDTO;
-import slf.talhao_manager.exception.CustomException;
-import slf.talhao_manager.model.TalhaoEntity;
 import slf.talhao_manager.repository.TalhaoJpaRepository;
 import slf.talhao_manager.service.TalhaoService;
 
-import java.util.List;
 
 @RestController
 public class TalhaoController {
@@ -31,7 +28,7 @@ public class TalhaoController {
     }
 
     @GetMapping("talhao/fazenda/{cdIdFazenda}")
-    public ResponseEntity<String> getTalhaoPorFazenda(@PathVariable(value = "cdIdFazenda") Long cdIdFazenda) {
+    public ResponseEntity<GeoJsonDTO> getTalhaoPorFazenda(@PathVariable(value = "cdIdFazenda") Long cdIdFazenda) {
         return ResponseEntity.status(HttpStatus.OK).body(talhaoSvc.findTalhoesByCdIdFazenda(cdIdFazenda));
     }
 }

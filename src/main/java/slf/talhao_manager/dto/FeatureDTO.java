@@ -2,11 +2,10 @@ package slf.talhao_manager.dto;
 
 import lombok.Data;
 
-import java.util.Map;
-
 @Data
 public class FeatureDTO {
-    private String type;
-    private Map<String, Object> properties;
+
+    private final String type = "Feature";
+    private PropertiesDTO properties;
     private GeometryDTO geometry;
 }

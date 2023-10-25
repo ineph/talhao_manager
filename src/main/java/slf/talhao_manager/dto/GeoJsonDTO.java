@@ -5,6 +5,7 @@ import java.util.List;
 
 @Data
 public class GeoJsonDTO {
-    private String type;
+
+    private final String type = "FeatureCollection";
     private List<FeatureDTO> features;
 }
